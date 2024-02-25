@@ -12,7 +12,7 @@ class MdDoc:
     """
     Class for easily generate pretty-readable Markdown documents.
     """
-    def __init__(self, page_width=40) -> None:
+    def __init__(self, page_width=80) -> None:
         self.doc = ""
         self.page_width = page_width
         self.cell_widths = []
@@ -31,23 +31,18 @@ class MdDoc:
         """
             Render a generic Heading.
         """
-        result = "#"*level + " " + text.strip() + "\n\n"
-        return result
+        return f"\n{'#'*level} {text.strip()}\n\n"
 
-    def __render_uhn(self, text: str, level="=", length=0) -> str:
+    def __render_uhn(self, text: str, level="=") -> str:
         """
             Render a generic Heading using userlined syntax.
         """
-        result = text.strip()
-        result = "# " + result + "\n"
-        counter = length if length > 0 else len(result)-1
-        result += level*counter + "\n\n"
-        return result
+        return f"\n{text.strip()}\n{level*len(text)}\n\n"
 
-    def __render_ruler(self) -> str:
+    def __render_ruler(self, length=15) -> str:
         """
         """
-        return "--- \n\n"
+        return f"{'-'*length}\n\n"
 
     def __render_text(self, text: str, trailer="\n\n") -> str:
         """
@@ -141,11 +136,11 @@ class MdDoc:
         """
         self.doc += self.__render_hn(text, level=1)
 
-    def add_uh1(self, text: str, length=0) -> None:
+    def add_uh1(self, text: str) -> None:
         """
             Append a H1 heading to current document using underlined syntax.
         """
-        self.doc += self.__render_uhn(text, "=", length)
+        self.doc += self.__render_uhn(text, "=")
 
     def add_h2(self, text: str) -> None:
         """
@@ -153,11 +148,11 @@ class MdDoc:
         """
         self.doc += self.__render_hn(text, level=2)
 
-    def add_uh2(self, text: str, length=0) -> None:
+    def add_uh2(self, text: str) -> None:
         """
             Append a H2 heading to current document using underlined syntax.
         """
-        self.doc += self.__render_uhn(text, "-", length)
+        self.doc += self.__render_uhn(text, "-")
 
     def add_h3(self, text: str) -> None:
         """
@@ -186,7 +181,7 @@ class MdDoc:
     def add_ruler(self) -> None:
         """
         """
-        self.doc += self.__render_ruler()
+        self.doc += self.__render_ruler(self.page_width)
 
     def add_par(self, text: str) -> None:
         """
@@ -230,6 +225,31 @@ class MdDoc:
         return self.doc
 
 
+def bold(text: str) -> str:
+    """
+    """
+    return f"**{text}**"
+
+def italic(text: str) -> str:
+    """
+    """
+    return f"*{text}*"
+
+def code(text: str) -> str:
+    """
+    """
+    return f"`{text}`"
+
+def highlight(text: str) -> str:
+    """
+    """
+    return f"=={text}=="
+
+def plain(text: str, width=20) -> str:
+    """
+    """
+    return fill(text, width)
+
 if __name__ == '__main__':
 
     d = MdDoc(25)
@@ -258,6 +278,8 @@ if __name__ == '__main__':
     d.add_table_row("one", "two", "three")
     d.add_table_row("uno", "due", "tre")
     d.add_table_footer()
+
+    d.add_ruler()
 
 #   d += "Simple text"
 
