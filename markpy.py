@@ -9,8 +9,7 @@ from textwrap import fill
 
 
 class MdDoc:
-    """
-    Class for easily generate pretty-readable Markdown documents.
+    """Class for easily generate pretty-readable Markdown documents.
     """
     def __init__(self, page_width=80) -> None:
         self.doc = ""
@@ -28,14 +27,12 @@ class MdDoc:
         return self.doc
 
     def __render_hn(self, text: str, level=1) -> str:
-        """
-            Render a generic Heading.
+        """Render a generic Heading.
         """
         return f"\n{'#'*level} {text.strip()}\n\n"
 
     def __render_uhn(self, text: str, level="=") -> str:
-        """
-            Render a generic Heading using userlined syntax.
+        """Render a generic Heading using userlined syntax.
         """
         return f"\n{text.strip()}\n{level*len(text)}\n\n"
 
@@ -131,86 +128,78 @@ class MdDoc:
         return 0
 
     def add_h1(self, text: str) -> None:
-        """
-            Append a H1 heading to current document.
+        """Append a H1 heading to current document.
         """
         self.doc += self.__render_hn(text, level=1)
 
     def add_uh1(self, text: str) -> None:
-        """
-            Append a H1 heading to current document using underlined syntax.
+        """Append a H1 heading to current document using underlined syntax.
         """
         self.doc += self.__render_uhn(text, "=")
 
     def add_h2(self, text: str) -> None:
-        """
-            Append a H2 heading to current document.
+        """Append a H2 heading to current document.
         """
         self.doc += self.__render_hn(text, level=2)
 
     def add_uh2(self, text: str) -> None:
-        """
-            Append a H2 heading to current document using underlined syntax.
+        """Append a H2 heading to current document using underlined syntax.
         """
         self.doc += self.__render_uhn(text, "-")
 
     def add_h3(self, text: str) -> None:
-        """
-            Append a H3 heading to current document.
+        """Append a H3 heading to current document.
         """
         self.doc += self.__render_hn(text, level=3)
 
     def add_h4(self, text: str) -> None:
-        """
-            Append a H4 heading to current document.
+        """Append a H4 heading to current document.
         """
         self.doc += self.__render_hn(text, level=4)
 
     def add_h5(self, text: str) -> None:
-        """
-            Append a H5 heading to current document.
+        """Append a H5 heading to current document.
         """
         self.doc += self.__render_hn(text, level=5)
 
     def add_h6(self, text: str) -> None:
-        """
-            Append a H6 heading to current document.
+        """Append a H6 heading to current document.
         """
         self.doc += self.__render_hn(text, level=6)
 
     def add_ruler(self) -> None:
-        """
+        """Append an horizontal ruler.
         """
         self.doc += self.__render_ruler(self.page_width)
 
     def add_par(self, text: str) -> None:
-        """
+        """Append a new paragraph of text.
         """
         self.doc += self.__render_text(text, "  \n\n")
 
     def add_text(self, text: str) -> None:
-        """
+        """Append unformatted text.
         """
         self.doc += self.__render_text(text)
 
     def add_quote(self, text: str) -> None:
-        """
+        """Applend a new blockquote section.
         """
         self.doc += self.__render_quote(text)
 
     def add_table_header(self, *headers) -> None:
-        """
+        """Append a new table header.
         """
         # add rendered header
         self.doc += self.__render_table_header(*headers)
 
     def add_table_row(self, *columns) -> None:
-        """
+        """Append a new table row.
         """
         self.doc += self.__render_table_row(*columns)
 
     def add_table_footer(self) -> None:
-        """
+        """Append a table trailer.
         """
         # add rendered footer
         self.doc += self.__render_table_footer()
@@ -219,34 +208,34 @@ class MdDoc:
         self.cell_aligns = []
 
     def get_doc(self) -> str:
-        """
+        """Return the document as an str object.
         """
         # return interal document representation
         return self.doc
 
 
 def bold(text: str) -> str:
-    """
+    """Format a piece of text in bold.
     """
     return f"**{text}**"
 
 def italic(text: str) -> str:
-    """
+    """Format a piece of text in italic.
     """
     return f"*{text}*"
 
 def code(text: str) -> str:
-    """
+    """Format a piece of text as raw code.
     """
     return f"`{text}`"
 
 def highlight(text: str) -> str:
-    """
+    """Format a piece using highlight feature.
     """
     return f"=={text}=="
 
 def plain(text: str, width=20) -> str:
-    """
+    """Format a piece of plain text using provided 'width' as end-of-line limit.
     """
     return fill(text, width)
 
