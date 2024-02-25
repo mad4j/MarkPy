@@ -1,5 +1,5 @@
 
-def insert_breaks(text: str, width=25):
+def insert_breaks(text: str, width=40):
     last_break = 0
     last_space = 0
     for i in range(len(text)):

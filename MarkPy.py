@@ -1,7 +1,11 @@
+
+from md_utils import insert_breaks
+
 class MDDocument:
 
-    def __init__(self):
+    def __init__(self, page_width=40):
         self.doc = ""
+        self.page_width = page_width
     
     def __add__(self, other):
         return self.addText(other)
@@ -52,7 +56,11 @@ class MDDocument:
         self.doc += text.strip() + "\n\n"
 
     def addBlock(self, text: str):
-        self.doc += "> " + text.strip() + "  \n\n"
+        text = text.lstrin()
+        text = insert_breaks(text, self.page_width).splitlines()
+        for line in text:
+            self.doc += "> " + line + "\n"
+        self.doc += "\n"
     
     def addTableHeader(self, *headers):
         self.doc += "|"
