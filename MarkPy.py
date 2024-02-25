@@ -1,129 +1,169 @@
-   
-from textwrap import fill 
+"""Easy Markdown document generation
+"""
 
-class MDDocument:
+# Daniele Olmisani <daniele.olmisani@gmail.com>
+# see LICENSE file
 
-    def __init__(self, page_width=40):
+from textwrap import fill
+
+
+class MdDoc:
+    """
+    """
+    def __init__(self, page_width=40) -> None:
         self.doc = ""
         self.page_width = page_width
-    
+        self.cell_widths = []
+        self.cell_aligns = []
+
     def __add__(self, other):
-        return self.addText(other)
-    
+        return self.add_text(other)
+
     def __iadd__(self, other):
-        return self.addText(other)
-    
+        return self.add_text(other)
+
     def __str__(self):
         return self.doc
 
+    def __render_hn(self, text: str, level=1) -> str:
+        """
+        """
+        result = "#"*level + " " + text.strip() + "\n\n"
+        return result
+    
+    def __render_uhn(self, text: str, level="=", length=0) -> str:
+        """
+        """
+        result = text.strip()
+        result = "# " + result + "\n"
+        counter = length if length > 0 else len(result)-1
+        result += level*counter + "\n\n"
+        return result
 
-    def addHeading1(self, text: str):
-        self.doc += "# " + text.strip() + "\n\n"
+    def add_h1(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_hn(text, level=1)
 
-    def addUnderlinedHeading1(self, text: str, length = 0):
-        text = text.strip()
-        text = "# " + text + "\n"
-        self.doc += text
-        l = length if length > 0 else len(text)-1
-        self.doc += "="*l + "\n\n"
+    def add_uh1(self, text: str, length=0) -> None:
+        """
+        """
+        self.doc += self.__render_uhn(text, "=", length)
 
-    def addHeading2(self, text: str):
-        self.doc += "## " + text.strip() + "\n\n"
+    def add_h2(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_hn(text, level=2)
 
-    def addUnderlinedHeading2(self, text: str, length = 0):
-        text = text.strip()
-        text = "# " + text + "\n"
-        self.doc += text
-        l = length if length > 0 else len(text)-1
-        self.doc += "-"*l + "\n\n"
+    def add_uh2(self, text: str, length=0) -> None:
+        """
+        """
+        self.doc += self.__render_uhn(text, "-", length)
 
-    def addHeading3(self, text: str):
-        self.doc += "### " + text.strip() + "\n\n"
+    def add_h3(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_hn(text, level=3)
 
-    def addHeading4(self, text: str):
-        self.doc += "#### " + text.strip() + "\n\n"
+    def add_h4(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_hn(text, level=4)
 
-    def addHeading5(self, text: str):
-        self.doc += "##### " + text.strip() + "\n\n"
+    def add_h5(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_hn(text, level=5)
 
-    def addHeading6(self, text: str):
-        self.doc += "###### " + text.strip() + "\n\n"
+    def add_h6(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_hn(text, level=6)
 
-    def addRules(self):
-        self.doc += "--- \n\n"    
+    def add_ruler(self):
+        self.doc += "--- \n\n"
+        return self
 
-    def addParagraph(self, text: str):
+    def add_par(self, text: str):
         text = text.lstrip()
         text = fill(
-            text, 
-            width = self.page_width,
+            text,
+            width=self.page_width,
         )
         self.doc += text + "  \n\n"
+        return self
 
-    def addText(self, text: str):
+    def add_text(self, text: str):
         text = text.lstrip()
         text = fill(
-            text, 
-            width = self.page_width,
+            text,
+            width=self.page_width,
         )
         self.doc += text + "\n\n"
-        
+        return self
 
-    def addBlock(self, text: str):
+    def add_block(self, text: str):
         text = text.lstrip()
         text = fill(
-            text, 
-            width = self.page_width,
-            initial_indent = "> ",
-            subsequent_indent = "> "
+            text,
+            width=self.page_width,
+            initial_indent="> ",
+            subsequent_indent="> "
         )
         self.doc += text + "\n\n"
+        return self
 
-
-    
-    def addTableHeader(self, *headers):
+    def add_table_header(self, *headers):
         self.doc += "|"
         for h in headers:
             self.doc += " " + h + " |"
         self.doc += "\n" + "|"
         for h in headers:
             self.doc += "-"*(len(h)+2) + "|"
+        self.cell_widths = list(map(lambda x: len(x)+2, headers))
+        return self
 
-    def addTableRow(self, *columns):
+    def add_table_row(self, *columns):
         self.doc += "\n" + "|"
         for h in columns:
-            self.doc += " " + h.strip() + " |"    
+            self.doc += " " + h.strip() + " |"
+        return self
 
-    def addTableFooter(self):
+    def add_table_footer(self):
         self.doc += "\n\n"
+        self.cell_widths = []
+        return self
 
-
-    def get(self):
+    def get(self) -> str:
         return self.doc
 
 
 if __name__ == '__main__':
 
-    d = MDDocument(25)
+    d = MdDoc(25)
 
-    d.addHeading1("Test Heading 1")
-    d.addUnderlinedHeading1("Test Alternative Heading 1")
+    d.add_h1("Test Heading 1")
+    d.add_uh1("Test Alternative Heading 1")
 
-    d.addHeading2("Test Heading 2")
-    d.addUnderlinedHeading2("Test Alternative Heading 2")
+    d.add_h2("Test Heading 2")
+    d.add_uh2("Test Alternative Heading 2")
 
-    d.addHeading3("Test Heading 3")
-    d.addHeading4("Test Heading 4")
-    d.addHeading5("Test Heading 5")
-    d.addHeading6("Test Heading 6")
+    d.add_h3("Test Heading 3")
+    d.add_h4("Test Heading 4")
+    d.add_h5("Test Heading 5")
+    d.add_h6("Test Heading 6")
 
-    d.addParagraph("This is a paragraph.")
-    d.addParagraph("This is an other paragraph.")
+    d.add_par("This is a paragraph.")
+    d.add_par("This is an other paragraph.")
 
-    d.addBlock("This is a silly block of text.\nTo better work with Markdown files it should be useful to define a page width.")
+    d.add_block(
+        "This is a silly block of text.\n"
+        "To better work with Markdown files "
+        "it should be useful to define a page width."
+    )
 
-    d.addTableHeader("One", "Two", "Three")
+    d.add_table_header("One", "Two", "Three")
 
-    #d += "Simple text"
+#   d += "Simple text"
 
     print(d)
