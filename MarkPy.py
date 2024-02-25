@@ -4,11 +4,13 @@
 # Daniele Olmisani <daniele.olmisani@gmail.com>
 # see LICENSE file
 
+import re
 from textwrap import fill
 
 
 class MdDoc:
     """
+    Class for easily generate pretty-readable Markdown documents.
     """
     def __init__(self, page_width=40) -> None:
         self.doc = ""
@@ -27,12 +29,14 @@ class MdDoc:
 
     def __render_hn(self, text: str, level=1) -> str:
         """
+            Render a generic Heading.
         """
         result = "#"*level + " " + text.strip() + "\n\n"
         return result
-    
+
     def __render_uhn(self, text: str, level="=", length=0) -> str:
         """
+            Render a generic Heading using userlined syntax.
         """
         result = text.strip()
         result = "# " + result + "\n"
@@ -40,101 +44,189 @@ class MdDoc:
         result += level*counter + "\n\n"
         return result
 
-    def add_h1(self, text: str) -> None:
+    def __render_ruler(self) -> str:
         """
         """
-        self.doc += self.__render_hn(text, level=1)
+        return "--- \n\n"
 
-    def add_uh1(self, text: str, length=0) -> None:
+    def __render_text(self, text: str, trailer="\n\n") -> str:
         """
         """
-        self.doc += self.__render_uhn(text, "=", length)
-
-    def add_h2(self, text: str) -> None:
-        """
-        """
-        self.doc += self.__render_hn(text, level=2)
-
-    def add_uh2(self, text: str, length=0) -> None:
-        """
-        """
-        self.doc += self.__render_uhn(text, "-", length)
-
-    def add_h3(self, text: str) -> None:
-        """
-        """
-        self.doc += self.__render_hn(text, level=3)
-
-    def add_h4(self, text: str) -> None:
-        """
-        """
-        self.doc += self.__render_hn(text, level=4)
-
-    def add_h5(self, text: str) -> None:
-        """
-        """
-        self.doc += self.__render_hn(text, level=5)
-
-    def add_h6(self, text: str) -> None:
-        """
-        """
-        self.doc += self.__render_hn(text, level=6)
-
-    def add_ruler(self):
-        self.doc += "--- \n\n"
-        return self
-
-    def add_par(self, text: str):
-        text = text.lstrip()
-        text = fill(
+        result = text.lstrip()
+        result = fill(
             text,
             width=self.page_width,
         )
-        self.doc += text + "  \n\n"
-        return self
+        result += trailer
+        return result
 
-    def add_text(self, text: str):
-        text = text.lstrip()
-        text = fill(
-            text,
-            width=self.page_width,
-        )
-        self.doc += text + "\n\n"
-        return self
-
-    def add_block(self, text: str):
-        text = text.lstrip()
-        text = fill(
+    def __render_quote(self, text: str, trailer="\n\n") -> str:
+        """
+        """
+        result = text.lstrip()
+        result = fill(
             text,
             width=self.page_width,
             initial_indent="> ",
             subsequent_indent="> "
         )
-        self.doc += text + "\n\n"
-        return self
+        result += trailer
+        return result
 
-    def add_table_header(self, *headers):
-        self.doc += "|"
+    def __render_table_header(self, *headers) -> str:
+        """
+        """
+        self.cell_widths = list(map(len, headers))
+        self.cell_aligns = list(map(self.__get_table_cell_align, headers))
+        result = "|"
         for h in headers:
-            self.doc += " " + h + " |"
-        self.doc += "\n" + "|"
+            result += h.replace(":", " ") + "|"
+        result += "\n" + "|"
         for h in headers:
-            self.doc += "-"*(len(h)+2) + "|"
-        self.cell_widths = list(map(lambda x: len(x)+2, headers))
-        return self
+            result += re.sub("[^:]", "-", h) + "|"
+        result += "\n"
+        return result
 
-    def add_table_row(self, *columns):
-        self.doc += "\n" + "|"
+    def __render_table_cell(self, text: str, width: int, align=0) -> str:
+        """
+        """
+        text = text.strip()
+        if align == 0:
+            text = text.ljust(width, " ")
+        elif align == 1:
+            text = text.rjust(width, " ")
+        else:
+            text = text.center(width, " ")
+        return text
+
+    def __render_table_row(self, *columns) -> str:
+        """
+        """
+        result = "|"
+        counter = 0
         for h in columns:
-            self.doc += " " + h.strip() + " |"
-        return self
+            result += self.__render_table_cell(
+                h,
+                self.cell_widths[counter],
+                self.cell_aligns[counter]
+            )
+            result += "|"
+            if counter < len(columns):
+                counter += 1
+        result += "\n"
+        return result
 
-    def add_table_footer(self):
-        self.doc += "\n\n"
+    def __render_table_footer(self) -> str:
+        """
+        """
+        return "\n"
+
+    def __get_table_cell_align(self, header: str) -> int:
+        """
+        """
+        # center-alignment case
+        if header.startswith(":") and header.endswith(":"):
+            return 2
+
+        # right-alignment case
+        if header.endswith(":"):
+            return 1
+
+        # otherwise left-alignment
+        return 0
+
+    def add_h1(self, text: str) -> None:
+        """
+            Append a H1 heading to current document.
+        """
+        self.doc += self.__render_hn(text, level=1)
+
+    def add_uh1(self, text: str, length=0) -> None:
+        """
+            Append a H1 heading to current document using underlined syntax.
+        """
+        self.doc += self.__render_uhn(text, "=", length)
+
+    def add_h2(self, text: str) -> None:
+        """
+            Append a H2 heading to current document.
+        """
+        self.doc += self.__render_hn(text, level=2)
+
+    def add_uh2(self, text: str, length=0) -> None:
+        """
+            Append a H2 heading to current document using underlined syntax.
+        """
+        self.doc += self.__render_uhn(text, "-", length)
+
+    def add_h3(self, text: str) -> None:
+        """
+            Append a H3 heading to current document.
+        """
+        self.doc += self.__render_hn(text, level=3)
+
+    def add_h4(self, text: str) -> None:
+        """
+            Append a H4 heading to current document.
+        """
+        self.doc += self.__render_hn(text, level=4)
+
+    def add_h5(self, text: str) -> None:
+        """
+            Append a H5 heading to current document.
+        """
+        self.doc += self.__render_hn(text, level=5)
+
+    def add_h6(self, text: str) -> None:
+        """
+            Append a H6 heading to current document.
+        """
+        self.doc += self.__render_hn(text, level=6)
+
+    def add_ruler(self) -> None:
+        """
+        """
+        self.doc += self.__render_ruler()
+
+    def add_par(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_text(text, "  \n\n")
+
+    def add_text(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_text(text)
+
+    def add_quote(self, text: str) -> None:
+        """
+        """
+        self.doc += self.__render_quote(text)
+
+    def add_table_header(self, *headers) -> None:
+        """
+        """
+        # add rendered header
+        self.doc += self.__render_table_header(*headers)
+
+    def add_table_row(self, *columns) -> None:
+        """
+        """
+        self.doc += self.__render_table_row(*columns)
+
+    def add_table_footer(self) -> None:
+        """
+        """
+        # add rendered footer
+        self.doc += self.__render_table_footer()
+        # reset internal table state
         self.cell_widths = []
-        return self
+        self.cell_aligns = []
 
-    def get(self) -> str:
+    def get_doc(self) -> str:
+        """
+        """
+        # return interal document representation
         return self.doc
 
 
@@ -156,13 +248,16 @@ if __name__ == '__main__':
     d.add_par("This is a paragraph.")
     d.add_par("This is an other paragraph.")
 
-    d.add_block(
+    d.add_quote(
         "This is a silly block of text.\n"
         "To better work with Markdown files "
         "it should be useful to define a page width."
     )
 
-    d.add_table_header("One", "Two", "Three")
+    d.add_table_header(":One    ", ":Two   :", "Three    :")
+    d.add_table_row("one", "two", "three")
+    d.add_table_row("uno", "due", "tre")
+    d.add_table_footer()
 
 #   d += "Simple text"
 
