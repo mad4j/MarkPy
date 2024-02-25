@@ -1,5 +1,5 @@
-
-from md_utils import insert_breaks
+   
+from textwrap import fill 
 
 class MDDocument:
 
@@ -49,18 +49,37 @@ class MDDocument:
     def addHeading6(self, text: str):
         self.doc += "###### " + text.strip() + "\n\n"
 
+    def addRules(self):
+        self.doc += "--- \n\n"    
+
     def addParagraph(self, text: str):
-        self.doc += text.strip() + "  \n\n"
+        text = text.lstrip()
+        text = fill(
+            text, 
+            width = self.page_width,
+        )
+        self.doc += text + "  \n\n"
 
     def addText(self, text: str):
-        self.doc += text.strip() + "\n\n"
+        text = text.lstrip()
+        text = fill(
+            text, 
+            width = self.page_width,
+        )
+        self.doc += text + "\n\n"
+        
 
     def addBlock(self, text: str):
-        text = text.lstrin()
-        text = insert_breaks(text, self.page_width).splitlines()
-        for line in text:
-            self.doc += "> " + line + "\n"
-        self.doc += "\n"
+        text = text.lstrip()
+        text = fill(
+            text, 
+            width = self.page_width,
+            initial_indent = "> ",
+            subsequent_indent = "> "
+        )
+        self.doc += text + "\n\n"
+
+
     
     def addTableHeader(self, *headers):
         self.doc += "|"
@@ -81,11 +100,11 @@ class MDDocument:
 
     def get(self):
         return self.doc
-    
+
 
 if __name__ == '__main__':
 
-    d = MDDocument()
+    d = MDDocument(25)
 
     d.addHeading1("Test Heading 1")
     d.addUnderlinedHeading1("Test Alternative Heading 1")
@@ -101,7 +120,7 @@ if __name__ == '__main__':
     d.addParagraph("This is a paragraph.")
     d.addParagraph("This is an other paragraph.")
 
-    d.addBlock("This is a block of text.")
+    d.addBlock("This is a silly block of text.\nTo better work with Markdown files it should be useful to define a page width.")
 
     d.addTableHeader("One", "Two", "Three")
 
