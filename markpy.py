@@ -29,12 +29,12 @@ class MdDoc:
     def __render_hn(self, text: str, level=1) -> str:
         """Render a generic Heading.
         """
-        return f"\n{'#'*level} {text.strip()}\n\n"
+        return f"{'#'*level} {text.strip()}\n\n"
 
     def __render_uhn(self, text: str, level="=") -> str:
         """Render a generic Heading using userlined syntax.
         """
-        return f"\n{text.strip()}\n{level*len(text)}\n\n"
+        return f"{text.strip()}\n{level*len(text)}\n\n"
 
     def __render_ruler(self, length=15) -> str:
         """
