@@ -65,6 +65,26 @@ class MdDoc:
         result += trailer
         return result
 
+    def __render_ul(self, text: str, placeholder="*") -> str:
+        """
+        """
+        # remove whithe spaces
+        result = text.strip()
+
+        # render secion using placeholder and identation
+        result = fill(
+            text,
+            width=self.page_width,
+            initial_indent=placeholder.center(3),
+            subsequent_indent="   "
+        )
+
+        # add an ending empty line
+        result += "\n"
+
+        # return rendered section
+        return result
+
     def __render_table_header(self, *headers) -> str:
         """
         """
@@ -123,6 +143,10 @@ class MdDoc:
         # right-alignment case
         if header.endswith(":"):
             return 1
+
+        # left-alignment case
+        if header.startswith(":"):
+            return 0
 
         # otherwise left-alignment
         return 0
@@ -183,9 +207,14 @@ class MdDoc:
         self.doc += self.__render_text(text)
 
     def add_quote(self, text: str) -> None:
-        """Applend a new blockquote section.
+        """Append a new blockquote section.
         """
         self.doc += self.__render_quote(text)
+
+    def add_ul(self, text: str, placeholder="*"):
+        """Append a bullet of un un-ordered list
+        """
+        self.doc += self.__render_ul(text, placeholder)
 
     def add_table_header(self, *headers) -> None:
         """Append a new table header.
@@ -270,7 +299,11 @@ if __name__ == '__main__':
 
     d.add_ruler()
 
+    d.add_ul("One")
+    d.add_ul("Two")
+    d.add_ul("This is a long list item. It is needed to wrap in more lines of text.")
+    d.add_ul("Three")
+
 #   d += "Simple text"
 
     print(d)
-    
