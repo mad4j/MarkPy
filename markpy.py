@@ -135,7 +135,7 @@ class MdDoc:
     def add_uh1(self, text: str) -> None:
         """Append a H1 heading to current document using underlined syntax.
         """
-        self.doc += self.__render_uhn(text, "=")
+        self.doc += self.__render_uhn(text, level="=")
 
     def add_h2(self, text: str) -> None:
         """Append a H2 heading to current document.
@@ -145,7 +145,7 @@ class MdDoc:
     def add_uh2(self, text: str) -> None:
         """Append a H2 heading to current document using underlined syntax.
         """
-        self.doc += self.__render_uhn(text, "-")
+        self.doc += self.__render_uhn(text, level="-")
 
     def add_h3(self, text: str) -> None:
         """Append a H3 heading to current document.
