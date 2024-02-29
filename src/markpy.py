@@ -6,9 +6,10 @@
 
 import re
 from textwrap import fill
-
+from renders.lists import render_ul
 
 class MdDoc:
+
     """Class for easily generate pretty-readable Markdown documents.
     """
 
@@ -67,79 +68,6 @@ class MdDoc:
         result += trailer
         return result
 
-
-
-    # Renders a single item of an unordered list.
-    def __render_ul(self, text: str, placeholder="*", level=1) -> str:
-        """
-        Renders a single item of an unordered list.
-
-        Args:
-            text : str
-                text to be displayed in list item
-            placeholder : str
-                unordered list bullet ["*", "-", "+"]
-            level : int
-                list nesting level (up to six levels)
-
-        Returns:
-            str : rendered list item as string
-
-        Raises:
-            ValueError : in case of invalid input argument
-        """
-        # valid unordered list placeholders
-        list_placeholders = ["*", "-", "+"]
-
-        # check 'level' value
-        if level<=0 or level>6:
-            raise ValueError(
-                f"Given 'level' value ({level}) outside valid range [1..6]."
-            )
-
-        # store bullet used for this level for future coherence check
-        if self.list_used_bullets[level] == "":
-            self.list_used_bullets[level] = placeholder
-
-        # veify incoherent usage of bullets by nesting levels
-        if placeholder != self.list_used_bullets[level]:
-            raise ValueError("")
-
-        # check 'placeholder' value
-        if placeholder not in list_placeholders:
-            raise ValueError(
-                f"Given 'placeholder' value ('{placeholder}') is not valid "
-                 "(allowed values: {list_placeholders})."
-            )
-
-
-# TODO: verify item staring with Numeber-dot case
-
-        # remove whithe spaces from 'text'
-        result = text.strip()
-
-        # item placeholder
-        bullet = f"{placeholder} "
-
-        # indentation spaces
-        indent = "    "*(level-1)
-
-        # extra spaces needed in subsequent indents
-        extra_pad = " "*len(bullet)
-
-        # render secion using placeholder and identation
-        result = fill(
-            text,
-            width=self.page_width-len(indent),
-            initial_indent=f"{indent}{placeholder} ",
-            subsequent_indent=f"{indent}{extra_pad}"
-        )
-
-        # add an ending empty line
-        result += "\n"
-
-        # return rendered section
-        return result
 
     def __render_table_header(self, *headers) -> str:
         """
@@ -270,7 +198,9 @@ class MdDoc:
     def add_ul(self, text: str, placeholder="*", level=1):
         """Append a bullet of un un-ordered list
         """
-        self.doc += self.__render_ul(text, placeholder, level)
+        self.doc += render_ul(text, placeholder, level,
+                              self.list_used_bullets,
+                              self.page_width)
 
     def add_table_header(self, *headers) -> None:
         """Append a new table header.
