@@ -11,11 +11,13 @@ from textwrap import fill
 class MdDoc:
     """Class for easily generate pretty-readable Markdown documents.
     """
+
     def __init__(self, page_width=80) -> None:
         self.doc = ""
         self.page_width = page_width
         self.cell_widths = []
         self.cell_aligns = []
+        self.list_used_bullets = ["", "", "", "", "", ""]
 
     def __add__(self, other):
         return self.add_text(other)
@@ -39,7 +41,7 @@ class MdDoc:
     def __render_ruler(self, length=15) -> str:
         """
         """
-        return f"{'-'*length}\n\n"
+        return f"\n{'-'*length}\n\n"
 
     def __render_text(self, text: str, trailer="\n\n") -> str:
         """
@@ -65,18 +67,72 @@ class MdDoc:
         result += trailer
         return result
 
-    def __render_ul(self, text: str, placeholder="*") -> str:
+
+
+    # Renders a single item of an unordered list.
+    def __render_ul(self, text: str, placeholder="*", level=1) -> str:
         """
+        Renders a single item of an unordered list.
+
+        Args:
+            text : str
+                text to be displayed in list item
+            placeholder : str
+                unordered list bullet ["*", "-", "+"]
+            level : int
+                list nesting level (up to six levels)
+
+        Returns:
+            str : rendered list item as string
+
+        Raises:
+            ValueError : in case of invalid input argument
         """
-        # remove whithe spaces
+        # valid unordered list placeholders
+        list_placeholders = ["*", "-", "+"]
+
+        # check 'level' value
+        if level<=0 or level>6:
+            raise ValueError(
+                f"Given 'level' value ({level}) outside valid range [1..6]."
+            )
+
+        # store bullet used for this level for future coherence check
+        if self.list_used_bullets[level] == "":
+            self.list_used_bullets[level] = placeholder
+
+        # veify incoherent usage of bullets by nesting levels
+        if placeholder != self.list_used_bullets[level]:
+            raise ValueError("")
+
+        # check 'placeholder' value
+        if placeholder not in list_placeholders:
+            raise ValueError(
+                f"Given 'placeholder' value ('{placeholder}') is not valid "
+                 "(allowed values: {list_placeholders})."
+            )
+
+
+# TODO: verify item staring with Numeber-dot case
+
+        # remove whithe spaces from 'text'
         result = text.strip()
+
+        # item placeholder
+        bullet = f"{placeholder} "
+
+        # indentation spaces
+        indent = "    "*(level-1)
+
+        # extra spaces needed in subsequent indents
+        extra_pad = " "*len(bullet)
 
         # render secion using placeholder and identation
         result = fill(
             text,
-            width=self.page_width,
-            initial_indent=placeholder.center(3),
-            subsequent_indent="   "
+            width=self.page_width-len(indent),
+            initial_indent=f"{indent}{placeholder} ",
+            subsequent_indent=f"{indent}{extra_pad}"
         )
 
         # add an ending empty line
@@ -211,10 +267,10 @@ class MdDoc:
         """
         self.doc += self.__render_quote(text)
 
-    def add_ul(self, text: str, placeholder="*"):
+    def add_ul(self, text: str, placeholder="*", level=1):
         """Append a bullet of un un-ordered list
         """
-        self.doc += self.__render_ul(text, placeholder)
+        self.doc += self.__render_ul(text, placeholder, level)
 
     def add_table_header(self, *headers) -> None:
         """Append a new table header.
@@ -302,8 +358,13 @@ if __name__ == '__main__':
     d.add_ul("One")
     d.add_ul("Two")
     d.add_ul("This is a long list item. It is needed to wrap in more lines of text.")
+    d.add_ul("Other item", level=2)
+    d.add_ul("A longer other item", level=2)
+    d.add_ul("An other item", level=2)
     d.add_ul("Three")
 
 #   d += "Simple text"
 
     print(d)
+
+#    d.add_ul("prova", level=20)
