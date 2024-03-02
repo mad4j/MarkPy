@@ -1,7 +1,6 @@
 """
 """
 
-__all__ = ["render_ul"]
 
 from textwrap import fill
 

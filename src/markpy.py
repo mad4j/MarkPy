@@ -6,10 +6,13 @@ MarkPy - Easy Markdown document generator.
 # Daniele Olmisani <daniele.olmisani@gmail.com>
 # see LICENSE file
 
-from textwrap import fill
+
+from typing import List
+
 from renders.lists import render_ul
 from renders.headings import render_hn, render_uhn, render_ruler
 from renders.tables import render_table_header, render_table_row, render_table_footer, get_table_cell_align
+from renders.sections import render_para, render_quote
 
 class MdDoc:
 
@@ -23,41 +26,8 @@ class MdDoc:
         self.cell_aligns = []
         self.list_used_bullets = ["", "", "", "", "", ""]
 
-    def __add__(self, other):
-        return self.add_text(other)
-
-    def __iadd__(self, other):
-        return self.add_text(other)
-
     def __str__(self):
         return self.doc
-
-
-    def __render_text(self, text: str, trailer="\n\n") -> str:
-        """
-        """
-        result = text.lstrip()
-        result = fill(
-            text,
-            width=self.page_width,
-        )
-        result += trailer
-        return result
-
-    def __render_quote(self, text: str, trailer="\n\n") -> str:
-        """
-        """
-        result = text.lstrip()
-        result = fill(
-            text,
-            width=self.page_width,
-            initial_indent="> ",
-            subsequent_indent="> "
-        )
-        result += trailer
-        return result
-
-
 
 
 #   Headers and rulers
@@ -108,20 +78,30 @@ class MdDoc:
         """
         self.doc += render_ruler(self.page_width)
 
-    def add_par(self, text: str) -> None:
+
+
+#   Sections
+#   --------
+        
+    def add_para(self, text: str) -> None:
         """Append a new paragraph of text.
         """
-        self.doc += self.__render_text(text, "  \n\n")
+        self.doc += render_para(text, page_width=self.page_width, trailer="  \n\n")
 
-    def add_text(self, text: str) -> None:
+    def add_simple(self, text: str) -> None:
         """Append unformatted text.
         """
-        self.doc += self.__render_text(text)
+        self.doc += render_para(text, page_width=self.page_width)
 
     def add_quote(self, text: str) -> None:
         """Append a new blockquote section.
         """
-        self.doc += self.__render_quote(text)
+        self.doc += render_quote(text, self.page_width)
+
+
+
+#   Bullet lists
+#   ------------
 
     def add_ul(self, text: str, placeholder="*", level=1):
         """Append a bullet of un un-ordered list
@@ -130,10 +110,11 @@ class MdDoc:
                               self.list_used_bullets,
                               self.page_width)
 
+
 #   Tables
 #   ------
 
-    def add_table_header(self, *headers) -> None:
+    def add_table_header(self, *headers: List[str]) -> None:
         """Append a new table header.
         """
 
@@ -163,6 +144,7 @@ class MdDoc:
         self.cell_widths = []
         self.cell_aligns = []
 
+
     def get_doc(self) -> str:
         """Return the document as an str object.
         """
@@ -185,8 +167,8 @@ if __name__ == '__main__':
     d.add_h5("Test Heading 5")
     d.add_h6("Test Heading 6")
 
-    d.add_par("This is a paragraph.")
-    d.add_par("This is an other paragraph.")
+    d.add_para("This is a paragraph.")
+    d.add_para("This is an other paragraph.")
 
     d.add_quote(
         "This is a silly block of text.\n"
@@ -208,8 +190,6 @@ if __name__ == '__main__':
     d.add_ul("A longer other item", level=2)
     d.add_ul("An other item", level=2)
     d.add_ul("Three")
-
-#   d += "Simple text"
 
     print(d)
 

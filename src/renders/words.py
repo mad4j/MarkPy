@@ -1,8 +1,6 @@
 """
 """
 
-__all__ = ["bold", "italic", "code", "highlight", "plain"]
-
 
 #TODO: questi non vengono aggiunti direttamente al documento
 
