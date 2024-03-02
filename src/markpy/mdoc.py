@@ -9,12 +9,12 @@ MarkPy - Easy Markdown document generator.
 
 from typing import List
 
-from renders.lists import render_ul
-from renders.headings import render_hn, render_uhn, render_ruler
-from renders.tables import render_table_header, render_table_row, render_table_footer, get_table_cell_align
-from renders.sections import render_para, render_quote
+from markpy.renders.lists import render_ul
+from markpy.renders.headings import render_hn, render_uhn, render_ruler
+from markpy.renders.tables import render_table_header, render_table_row, render_table_footer, get_table_cell_align
+from markpy.renders.sections import render_para, render_quote
 
-class MdDoc:
+class MDoc:
 
     """Class for easily generate pretty-readable Markdown documents.
     """
@@ -26,7 +26,14 @@ class MdDoc:
         self.cell_aligns = []
         self.list_used_bullets = ["", "", "", "", "", ""]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        return self.doc
+
+
+    def get_doc(self) -> str:
+        """Return the document as an str object.
+        """
+        # return interal document representation
         return self.doc
 
 
@@ -82,7 +89,7 @@ class MdDoc:
 
 #   Sections
 #   --------
-        
+
     def add_para(self, text: str) -> None:
         """Append a new paragraph of text.
         """
@@ -143,54 +150,3 @@ class MdDoc:
         # reset internal table state
         self.cell_widths = []
         self.cell_aligns = []
-
-
-    def get_doc(self) -> str:
-        """Return the document as an str object.
-        """
-        # return interal document representation
-        return self.doc
-
-
-if __name__ == '__main__':
-
-    d = MdDoc(25)
-
-    d.add_h1("Test Heading 1")
-    d.add_uh1("Test Alternative Heading 1")
-
-    d.add_h2("Test Heading 2")
-    d.add_uh2("Test Alternative Heading 2")
-
-    d.add_h3("Test Heading 3")
-    d.add_h4("Test Heading 4")
-    d.add_h5("Test Heading 5")
-    d.add_h6("Test Heading 6")
-
-    d.add_para("This is a paragraph.")
-    d.add_para("This is an other paragraph.")
-
-    d.add_quote(
-        "This is a silly block of text.\n"
-        "To better work with Markdown files "
-        "it should be useful to define a page width."
-    )
-
-    d.add_table_header(":One    ", ":Two   :", "Three    :")
-    d.add_table_row("one", "two", "three")
-    d.add_table_row("uno", "due", "tre")
-    d.add_table_footer()
-
-    d.add_ruler()
-
-    d.add_ul("One")
-    d.add_ul("Two")
-    d.add_ul("This is a long list item. It is needed to wrap in more lines of text.")
-    d.add_ul("Other item", level=2)
-    d.add_ul("A longer other item", level=2)
-    d.add_ul("An other item", level=2)
-    d.add_ul("Three")
-
-    print(d)
-
-#    d.add_ul("prova", level=20)
