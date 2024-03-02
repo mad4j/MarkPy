@@ -1,12 +1,15 @@
-"""Easy Markdown document generation
+"""
+MarkPy - Easy Markdown document generator.
+
 """
 
 # Daniele Olmisani <daniele.olmisani@gmail.com>
 # see LICENSE file
 
-import re
 from textwrap import fill
 from renders.lists import render_ul
+from renders.headings import render_hn, render_uhn, render_ruler
+from renders.tables import render_table_header, render_table_row, render_table_footer, get_table_cell_align
 
 class MdDoc:
 
@@ -29,20 +32,6 @@ class MdDoc:
     def __str__(self):
         return self.doc
 
-    def __render_hn(self, text: str, level=1) -> str:
-        """Render a generic Heading.
-        """
-        return f"{'#'*level} {text.strip()}\n\n"
-
-    def __render_uhn(self, text: str, level="=") -> str:
-        """Render a generic Heading using userlined syntax.
-        """
-        return f"{text.strip()}\n{level*len(text)}\n\n"
-
-    def __render_ruler(self, length=15) -> str:
-        """
-        """
-        return f"\n{'-'*length}\n\n"
 
     def __render_text(self, text: str, trailer="\n\n") -> str:
         """
@@ -69,116 +58,55 @@ class MdDoc:
         return result
 
 
-    def __render_table_header(self, *headers) -> str:
-        """
-        """
-        self.cell_widths = list(map(len, headers))
-        self.cell_aligns = list(map(self.__get_table_cell_align, headers))
-        result = "|"
-        for h in headers:
-            result += h.replace(":", " ") + "|"
-        result += "\n" + "|"
-        for h in headers:
-            result += re.sub("[^:]", "-", h) + "|"
-        result += "\n"
-        return result
 
-    def __render_table_cell(self, text: str, width: int, align=0) -> str:
-        """
-        """
-        text = text.strip()
-        if align == 0:
-            text = text.ljust(width, " ")
-        elif align == 1:
-            text = text.rjust(width, " ")
-        else:
-            text = text.center(width, " ")
-        return text
 
-    def __render_table_row(self, *columns) -> str:
-        """
-        """
-        result = "|"
-        counter = 0
-        for h in columns:
-            result += self.__render_table_cell(
-                h,
-                self.cell_widths[counter],
-                self.cell_aligns[counter]
-            )
-            result += "|"
-            if counter < len(columns):
-                counter += 1
-        result += "\n"
-        return result
-
-    def __render_table_footer(self) -> str:
-        """
-        """
-        return "\n"
-
-    def __get_table_cell_align(self, header: str) -> int:
-        """
-        """
-        # center-alignment case
-        if header.startswith(":") and header.endswith(":"):
-            return 2
-
-        # right-alignment case
-        if header.endswith(":"):
-            return 1
-
-        # left-alignment case
-        if header.startswith(":"):
-            return 0
-
-        # otherwise left-alignment
-        return 0
+#   Headers and rulers
+#   ------------------
 
     def add_h1(self, text: str) -> None:
         """Append a H1 heading to current document.
         """
-        self.doc += self.__render_hn(text, level=1)
+        self.doc += render_hn(text, level=1)
 
     def add_uh1(self, text: str) -> None:
         """Append a H1 heading to current document using underlined syntax.
         """
-        self.doc += self.__render_uhn(text, level="=")
+        self.doc += render_uhn(text, level="=")
 
     def add_h2(self, text: str) -> None:
         """Append a H2 heading to current document.
         """
-        self.doc += self.__render_hn(text, level=2)
+        self.doc += render_hn(text, level=2)
 
     def add_uh2(self, text: str) -> None:
         """Append a H2 heading to current document using underlined syntax.
         """
-        self.doc += self.__render_uhn(text, level="-")
+        self.doc += render_uhn(text, level="-")
 
     def add_h3(self, text: str) -> None:
         """Append a H3 heading to current document.
         """
-        self.doc += self.__render_hn(text, level=3)
+        self.doc += render_hn(text, level=3)
 
     def add_h4(self, text: str) -> None:
         """Append a H4 heading to current document.
         """
-        self.doc += self.__render_hn(text, level=4)
+        self.doc += render_hn(text, level=4)
 
     def add_h5(self, text: str) -> None:
         """Append a H5 heading to current document.
         """
-        self.doc += self.__render_hn(text, level=5)
+        self.doc += render_hn(text, level=5)
 
     def add_h6(self, text: str) -> None:
         """Append a H6 heading to current document.
         """
-        self.doc += self.__render_hn(text, level=6)
+        self.doc += render_hn(text, level=6)
 
     def add_ruler(self) -> None:
         """Append an horizontal ruler.
         """
-        self.doc += self.__render_ruler(self.page_width)
+        self.doc += render_ruler(self.page_width)
 
     def add_par(self, text: str) -> None:
         """Append a new paragraph of text.
@@ -202,22 +130,35 @@ class MdDoc:
                               self.list_used_bullets,
                               self.page_width)
 
+#   Tables
+#   ------
+
     def add_table_header(self, *headers) -> None:
         """Append a new table header.
         """
+
+        # update interal state
+        self.cell_widths = list(map(len, headers))
+        self.cell_aligns = list(map(get_table_cell_align, headers))
+
         # add rendered header
-        self.doc += self.__render_table_header(*headers)
+        self.doc += render_table_header(*headers)
+
 
     def add_table_row(self, *columns) -> None:
         """Append a new table row.
         """
-        self.doc += self.__render_table_row(*columns)
+        self.doc += render_table_row(
+            *columns, 
+            widths=self.cell_widths,
+            aligns=self.cell_aligns
+        )
 
     def add_table_footer(self) -> None:
         """Append a table trailer.
         """
         # add rendered footer
-        self.doc += self.__render_table_footer()
+        self.doc += render_table_footer()
         # reset internal table state
         self.cell_widths = []
         self.cell_aligns = []
@@ -228,31 +169,6 @@ class MdDoc:
         # return interal document representation
         return self.doc
 
-
-def bold(text: str) -> str:
-    """Format a piece of text in bold.
-    """
-    return f"**{text}**"
-
-def italic(text: str) -> str:
-    """Format a piece of text in italic.
-    """
-    return f"*{text}*"
-
-def code(text: str) -> str:
-    """Format a piece of text as raw code.
-    """
-    return f"`{text}`"
-
-def highlight(text: str) -> str:
-    """Format a piece using highlight feature.
-    """
-    return f"=={text}=="
-
-def plain(text: str, width=20) -> str:
-    """Format a piece of plain text using provided 'width' as end-of-line limit.
-    """
-    return fill(text, width)
 
 if __name__ == '__main__':
 
