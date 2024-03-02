@@ -1,8 +1,6 @@
 """
 MarkPy - Headings module.
-
 """
-
 
 from markpy.exceptions import InvalidArgumentException
 

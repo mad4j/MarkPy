@@ -11,8 +11,12 @@ from typing import List
 
 from markpy.renders.lists import render_ul
 from markpy.renders.headings import render_hn, render_uhn, render_ruler
-from markpy.renders.tables import render_table_header, render_table_row, render_table_footer, get_table_cell_align
 from markpy.renders.sections import render_para, render_quote
+
+from markpy.renders.tables import render_table_header
+from markpy.renders.tables import render_table_row
+from markpy.renders.tables import render_table_footer
+from markpy.renders.tables import get_table_cell_align
 
 class MDoc:
 
@@ -35,6 +39,7 @@ class MDoc:
         """
         # return interal document representation
         return self.doc
+
 
 
 #   Headers and rulers

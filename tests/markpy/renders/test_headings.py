@@ -82,6 +82,9 @@ class TestHeadings:
         assert head.render_uhn(" Title ", 2) == "\nTitle\n-----\n\n"
 
     def test_render_ruler(self):
+        """
+        Test to verify horizonal ruler rendering
+        """
 
         assert head.render_ruler(3) == "\n---\n\n"
         assert head.render_ruler(4) == "\n----\n\n"
@@ -90,6 +93,5 @@ class TestHeadings:
         for i in range(6, 21):
             assert head.render_ruler(i) == "\n" + "-"*i + "\n\n"
 
-    def test_render_ruler_with_min_value(self):
         assert head.render_ruler(1) == "\n---\n\n"
         assert head.render_ruler(2) == "\n---\n\n"
