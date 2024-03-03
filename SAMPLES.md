@@ -2,7 +2,7 @@
 
 ## Heading samples
 
-### Python code
+Python code  
 
 ```python
 d.add_h1("Heading level 1")
@@ -13,7 +13,7 @@ d.add_h5("Heading level 5")
 d.add_h6("Heading level 6")
 ```
 
-### Generated Markdown code
+Generated Markdown code  
 
 ```markdown
 # Heading level 1
@@ -30,7 +30,7 @@ d.add_h6("Heading level 6")
 
 ```
 
-### Rendered Markdown code
+Rendered Markdown code  
 
 # Heading level 1
 
@@ -48,7 +48,7 @@ d.add_h6("Heading level 6")
 
 ## Emphasys samples
 
-### Python code
+Python code  
 
 ```python
 d.add_para(em.bold("bold"))
@@ -57,7 +57,7 @@ d.add_para(em.code("code"))
 d.add_para(em.highlight("highlight"))
 ```
 
-### Generated Markdown code
+Generated Markdown code  
 
 ```markdown
 **bold**  
@@ -70,7 +70,7 @@ d.add_para(em.highlight("highlight"))
 
 ```
 
-### Rendered Markdown code
+Rendered Markdown code  
 
 **bold**  
 

@@ -10,11 +10,11 @@ def append_fragment(doc: MDoc, statements: str) -> None:
     d = MDoc(doc.page_width)
     exec(statements)
 
-    doc.add_h3("Python code")
+    doc.add_para("Python code")
     doc.add_code(statements, language="python")
-    doc.add_h3("Generated Markdown code")
+    doc.add_para("Generated Markdown code")
     doc.add_code(d.get_doc(), language="markdown")
-    doc.add_h3("Rendered Markdown code")
+    doc.add_para("Rendered Markdown code")
     doc.append(d)
 
 if __name__ == '__main__':

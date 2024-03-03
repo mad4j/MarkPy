@@ -18,6 +18,7 @@ from markpy.renders.tables import render_table_row
 from markpy.renders.tables import render_table_footer
 from markpy.renders.tables import get_table_cell_align
 
+
 class MDoc:
 
     """Class for easily generate pretty-readable Markdown documents.
@@ -112,7 +113,7 @@ class MDoc:
         """Append a new blockquote section.
         """
         self.doc += render_quote(text, self.page_width)
-        
+
     def add_code(self, text: str, language="") -> None:
         """Append a new fenced code section.
         """
@@ -150,7 +151,7 @@ class MDoc:
         """Append a new table row.
         """
         self.doc += render_table_row(
-            *columns, 
+            *columns,
             widths=self.cell_widths,
             aligns=self.cell_aligns
         )
