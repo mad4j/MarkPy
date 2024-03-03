@@ -1,3 +1,6 @@
 {
-    "pylint.cwd": "${workspaceFolder}/src"
+    "pylint.cwd": "${workspaceFolder}/src",
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/samples"
+    ]
 }

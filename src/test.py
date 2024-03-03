@@ -1,6 +1,6 @@
 
-from markpy.mdoc import MDoc
 
+from markpy.mdoc import MDoc
 
 if __name__ == '__main__':
 

@@ -46,3 +46,39 @@ d.add_h6("Heading level 6")
 
 --------------------------------------------------------------------------------
 
+## Emphasys samples
+
+### Python code
+
+```python
+d.add_para(em.bold("bold"))
+d.add_para(em.italic("italic"))
+d.add_para(em.code("code"))
+d.add_para(em.highlight("highlight"))
+```
+
+### Generated Markdown code
+
+```markdown
+**bold**  
+
+*italic*  
+
+`code`  
+
+==highlight==  
+
+```
+
+### Rendered Markdown code
+
+**bold**  
+
+*italic*  
+
+`code`  
+
+==highlight==  
+
+--------------------------------------------------------------------------------
+

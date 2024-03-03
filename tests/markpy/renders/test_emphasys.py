@@ -41,7 +41,7 @@ class TestEmphasys:
 
          # test code emphasys
         assert em.code("text") == "`text`"
-        
+
     def test_render_highlight(self):
         """
         Test to verify highlight emphasys

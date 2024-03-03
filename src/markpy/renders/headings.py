@@ -1,6 +1,12 @@
 """
-MarkPy - Headings module.
+MarkPy - Easy Markdown document generator.
+
+Headings module.
 """
+
+# Daniele Olmisani <daniele.olmisani@gmail.com>
+# see LICENSE file
+
 
 from markpy.exceptions import InvalidArgumentException
 
@@ -14,14 +20,55 @@ VALID_UNDERLINE_CHARS = ["=", "-"]
 
 def render_hn(text: str, level=1) -> str:
     """Render a generic Heading.
+
+    Something like:
+
+    # A very important title
+
+    Args:
+        text (str): text to be diplayed as title
+        level (int): heading importance level
+
+    Returns:
+        (str): rendered heading
+
+    Raises:
+        InvalidArgumentException: if not valid values provided as arguments
+
     """
-    return f"\n{'#'*level} {text.strip()}\n\n"
+
+    # verify for valid 'level' values
+    if level<1 or level>6:
+        raise InvalidArgumentException(
+             f"Not a valid 'level' value ('{level}', use a value in range [1..6].")
+
+    # remove unwanted white spaces
+    text = text.strip()
+
+    # return result value
+    return f"{'#'*level} {text}\n\n"
 
 
 def render_uhn(text: str, level=1) -> str:
-    """Render a generic Heading using userlined syntax.
     """
+    Render a generic Heading using userlined syntax.
 
+    Something like:
+
+    A very important title
+    ======================
+
+    Args:
+        text (str): text to be diplayed as title
+        level (int): heading importance level
+
+    Returns:
+        (str): rendered heading
+
+    Raises:
+        InvalidArgumentException: if not valid values provided as arguments
+
+    """
     # verify for valid 'level' values
     if level<1 or level>2:
         raise InvalidArgumentException(
@@ -31,7 +78,7 @@ def render_uhn(text: str, level=1) -> str:
     text = text.strip()
 
     # return result value
-    return f"\n{text}\n{VALID_UNDERLINE_CHARS[level-1]*len(text)}\n\n"
+    return f"{text}\n{VALID_UNDERLINE_CHARS[level-1]*len(text)}\n\n"
 
 
 def render_ruler(length=3, separator="-") -> str | InvalidArgumentException:
@@ -70,4 +117,4 @@ def render_ruler(length=3, separator="-") -> str | InvalidArgumentException:
     length = max(length, 3)
 
     # return result value
-    return f"\n{separator*length}\n\n"
+    return f"{separator*length}\n\n"

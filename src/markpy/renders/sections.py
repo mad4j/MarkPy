@@ -46,6 +46,17 @@ def render_quote(text: str, page_width=80, trailer="\n\n") -> str:
     result += trailer
     return result
 
+def render_code(text: str, language="", page_width=80) -> str:
+    result = fill(
+        text,
+        width=page_width
+    )
+
+    result = f"```{language}\n{text}```\n\n"   
+
+    return result
+
+
 def render_line_break() -> str:
     """
     Render a line break.

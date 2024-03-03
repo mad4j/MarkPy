@@ -11,7 +11,7 @@ from typing import List
 
 from markpy.renders.lists import render_ul
 from markpy.renders.headings import render_hn, render_uhn, render_ruler
-from markpy.renders.sections import render_para, render_quote
+from markpy.renders.sections import render_para, render_quote, render_code
 
 from markpy.renders.tables import render_table_header
 from markpy.renders.tables import render_table_row
@@ -40,7 +40,10 @@ class MDoc:
         # return interal document representation
         return self.doc
 
-
+    def append(self, doc) -> None:
+        """Append the content of anohter MDoc object.
+        """
+        self.doc += doc.get_doc()
 
 #   Headers and rulers
 #   ------------------
@@ -53,7 +56,7 @@ class MDoc:
     def add_uh1(self, text: str) -> None:
         """Append a H1 heading to current document using underlined syntax.
         """
-        self.doc += render_uhn(text, level="=")
+        self.doc += render_uhn(text, level=1)
 
     def add_h2(self, text: str) -> None:
         """Append a H2 heading to current document.
@@ -63,7 +66,7 @@ class MDoc:
     def add_uh2(self, text: str) -> None:
         """Append a H2 heading to current document using underlined syntax.
         """
-        self.doc += render_uhn(text, level="-")
+        self.doc += render_uhn(text, level=2)
 
     def add_h3(self, text: str) -> None:
         """Append a H3 heading to current document.
@@ -109,6 +112,11 @@ class MDoc:
         """Append a new blockquote section.
         """
         self.doc += render_quote(text, self.page_width)
+        
+    def add_code(self, text: str, language="") -> None:
+        """Append a new fenced code section.
+        """
+        self.doc += render_code(text, language, self.page_width)
 
 
 
