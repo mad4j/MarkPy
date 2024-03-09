@@ -114,7 +114,7 @@ class MDoc:
         """
         self.doc += render_quote(text, self.page_width)
 
-    def add_code(self, text: str, language="") -> None:
+    def add_code(self, text: str, language: str = "text") -> None:
         """Append a new fenced code section.
         """
         self.doc += render_code(text, language, self.page_width)

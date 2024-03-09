@@ -2,5 +2,10 @@
     "pylint.cwd": "${workspaceFolder}/src",
     "python.autoComplete.extraPaths": [
         "${workspaceFolder}/samples"
-    ]
+    ],
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/samples"
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true
 }

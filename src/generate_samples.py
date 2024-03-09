@@ -43,6 +43,16 @@ d.add_para(em.highlight("highlight"))
 
     doc.add_ruler()
 
+    text = "This is an sample section text."
+
+    doc.add_h2("Sections samples")
+    append_fragment(doc, """d.add_para(text)
+d.add_quote(text)
+d.add_code(text)
+""")
+
+    doc.add_ruler()
+
 f = open("SAMPLES.md", "w")
 f.write(doc.get_doc())
 f.close()

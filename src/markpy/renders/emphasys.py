@@ -20,7 +20,7 @@ def bold(text: str) -> str:
     Returns:
         str: rendered text
     """
-    return f"**{text}**"
+    return f'**{text}**'
 
 
 def italic(text: str) -> str:
@@ -37,7 +37,7 @@ def italic(text: str) -> str:
     Returns:
         str: rendered text
     """
-    return f"*{text}*"
+    return f'*{text}*'
 
 
 def code(text: str) -> str:
@@ -52,7 +52,7 @@ def code(text: str) -> str:
     Returns:
         str: rendered text
     """
-    return f"`{text}`"
+    return f'`{text}`'
 
 
 def highlight(text: str) -> str:
@@ -68,4 +68,4 @@ def highlight(text: str) -> str:
     Returns:
         str: rendered text
     """
-    return f"=={text}=="
+    return f'=={text}=='

@@ -1,14 +1,36 @@
 """
+MarkPy - Text sections module.
 """
+
+# Daniele Olmisani <daniele.olmisani@gmail.com>
+# see LICENSE file
+
 
 from textwrap import fill
 
-
-
-def plain(text: str, width=20) -> str:
-    """Format a piece of plain text using provided 'width' as end-of-line limit.
+def render_plain(text: str, page_width: int = 20) -> str:
     """
-    return fill(text, width)
+    Format a piece of plain text using provided 'width' as end-of-line limit.
+    
+    Args:
+        text (str): text to be emphatized
+        width (int): page width
+        
+    Returns:
+        str: rendered text
+    """
+
+    # remove unwanted spces and end-lines
+    text = text.strip()
+
+    # split using 'page_width' as limit
+    result = fill(
+        text,
+        width = page_width
+    )
+
+    # return rendered text
+    return result
 
 
 def render_para(text: str, page_width=80, trailer="\n\n") -> str:
@@ -46,14 +68,39 @@ def render_quote(text: str, page_width=80, trailer="\n\n") -> str:
     result += trailer
     return result
 
-def render_code(text: str, language="", page_width=80) -> str:
+def render_code(text: str, language: str = "text", page_width: int = 80) -> str:
+    """
+    Format a piece of text using fenced code formatting.
+    
+    Args:
+        text (str): text to be emphatized
+        width (int): page end-of-line limit
+        
+    Returns:
+        str: rendered text
+    """
+
+    # use 'text' if syntax highlight language is not provided
+    if language is None or language == '':
+        language = 'text'
+
+    # remove unwanted line endings
+    text = text.strip()
+
+    # escape backticks eventually contained in 'text'
+    if '`' in text:
+        text = f'`` {text} ``'
+
+    # split lines at given 'page_with'
     result = fill(
         text,
         width=page_width
     )
 
-    result = f"```{language}\n{text}```\n\n"   
+    # add code fences
+    result = f'```{language}\n{text}\n```\n\n'
 
+    # return result value
     return result
 
 
@@ -64,6 +111,6 @@ def render_line_break() -> str:
     and then type return.
     
     Returns:
-        str: line break
+        str: rendered line break
     """
-    return "  \n"
+    return '  \n'
