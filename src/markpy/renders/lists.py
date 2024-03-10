@@ -105,5 +105,61 @@ def render_ul(
     # add an ending empty line
     result = f'{result}\n\n'
 
-    # return rendered section
+    # return rendered result
+    return result
+
+
+# Renders a single item of a definition list.
+def render_dl(
+        term: str,
+        text: str,
+        page_width: int = 80
+    ) -> str:
+
+    """
+    Renders a single item of a definition list.
+    
+    Some Markdown processors allow you to create definition lists 
+    of terms and their corresponding definitions. To create a definition 
+    list, type the term on the first line. On the next line, type a 
+    colon followed by a space and the definition.
+
+    Args:
+        term : str
+            text to be displayed in list item
+        text : str
+            unordered list bullet ['*', '-', '+']
+        page_width : int
+            list nesting level (up to six levels)
+
+    Returns:
+        str : rendered list item as string
+
+    Raises:
+        None
+    """
+
+    # remove unwanted white spaces and end of lines
+    term = term.strip()
+    text = text.strip()
+
+
+    # render 'term' using provided 'page_width'
+    term = fill(
+        term,
+        width = page_width
+    )
+
+    # render 'text' using provided 'page_width'
+    text = fill(
+        text,
+        width = page_width,
+        initial_indent = ': ',
+        subsequent_indent = '  '
+    )
+
+    # put together all parts
+    result = f'{term}\n{text}\n\n'
+
+    # return rendered result
     return result

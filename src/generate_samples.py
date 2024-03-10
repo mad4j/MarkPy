@@ -54,10 +54,18 @@ d.add_code(text)
     doc.add_ruler()
 
     doc.add_h2("Lists samples")
+    doc.add_h3("Unordered lists samples")
     append_fragment(doc, """
 d.add_ul('One. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
 d.add_ul('Two. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
 d.add_ul('Three. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+""")
+
+    doc.add_h3("Definition lists samples")
+    append_fragment(doc, """
+d.add_dl('One.', 'This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_dl('Two.', 'This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_dl('Three.', 'This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
 """)
 
     doc.add_ruler()

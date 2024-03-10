@@ -81,7 +81,7 @@ def render_uhn(text: str, level=1) -> str:
     return f"{text}\n{VALID_UNDERLINE_CHARS[level-1]*len(text)}\n\n"
 
 
-def render_ruler(length=3, separator="-") -> str | InvalidArgumentException:
+def render_ruler(length: int = 3, separator: str = '-') -> (str | InvalidArgumentException):
     """
     Render an horizontal ruler separator.
 

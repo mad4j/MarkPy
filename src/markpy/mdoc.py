@@ -7,9 +7,10 @@ MarkPy - Easy Markdown document generator.
 # see LICENSE file
 
 
-from typing import List
+from typing import List, Self
+from markpy.exceptions import InvalidArgumentException
 
-from markpy.renders.lists import render_ul
+from markpy.renders.lists import render_dl, render_ul
 from markpy.renders.headings import render_hn, render_uhn, render_ruler
 from markpy.renders.sections import render_para, render_quote, render_code
 
@@ -89,10 +90,13 @@ class MDoc:
         """
         self.doc += render_hn(text, level=6)
 
-    def add_ruler(self) -> None:
+    def add_ruler(self: Self) -> (None | InvalidArgumentException):
         """Append an horizontal ruler.
         """
-        self.doc += render_ruler(self.page_width)
+        try:
+            self.doc += render_ruler(self.page_width)
+        except InvalidArgumentException:
+            raise
 
 
 
@@ -130,6 +134,16 @@ class MDoc:
         self.doc += render_ul(text, placeholder, level,
                               self.list_used_bullets,
                               self.page_width)
+        
+    def add_dl(self, term: str, text: str):
+        """_summary_
+
+        Args:
+            term (str): _description_
+            text (str): _description_
+        """
+        self.doc += render_dl(term, text, self.page_width)
+        
 
 
 #   Tables
