@@ -53,4 +53,3 @@ class TestEmphasys:
 
          # test fenced code section
         assert se.render_code("text") == "```text\ntext\n```\n\n"
-
