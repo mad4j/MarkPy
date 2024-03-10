@@ -9,9 +9,11 @@ Lists module.
 
 import re
 from textwrap import fill
-from typing import List
+
 
 from markpy.exceptions import IncoherenceException, InvalidArgumentException
+
+from typing import List
 
 
 # valid unordered list placeholders
