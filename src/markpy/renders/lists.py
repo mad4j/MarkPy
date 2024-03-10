@@ -1,22 +1,43 @@
 """
+MarkPy - Easy Markdown document generator.
+
+Lists module.
 """
 
+# Daniele Olmisani <daniele.olmisani@gmail.com>
+# see LICENSE file
 
+import re
 from textwrap import fill
+from typing import List
+
+from markpy.exceptions import IncoherenceException, InvalidArgumentException
+
 
 # valid unordered list placeholders
-VALID_BULLETS = ["*", "-", "+"]
+VALID_BULLETS = ['*', '-', '+']
 
 # Renders a single item of an unordered list.
-def render_ul(text: str, placeholder="*", level=1, list_used_bullets=None, page_width=80) -> str:
+def render_ul(
+        text: str,
+        bullet: str = '*',
+        level: int = 1,
+        list_used_bullets: List[str] | None =  None,
+        page_width: int = 80
+    ) -> str:
+
     """
     Renders a single item of an unordered list.
+    
+    To create an unordered list, add dashes (-), 
+    asterisks (*), or plus signs (+) in front of line items. 
+    Indent one or more items to create a nested list.
 
     Args:
         text : str
             text to be displayed in list item
         placeholder : str
-            unordered list bullet ["*", "-", "+"]
+            unordered list bullet ['*', '-', '+']
         level : int
             list nesting level (up to six levels)
 
@@ -24,59 +45,65 @@ def render_ul(text: str, placeholder="*", level=1, list_used_bullets=None, page_
         str : rendered list item as string
 
     Raises:
-        ValueError : in case of invalid input argument
+        InvalidArgumentException : in case of invalid input argument
+        IncoherenceException : in case of usage of mixed styles
     """
 
     # check for default value
     if list_used_bullets is None:
-        list_used_bullets = ["*"]
+        list_used_bullets = ['*']
 
     # check 'level' value
     if level<=0 or level>6:
-        raise ValueError(
-            f"Given 'level' value ({level}) outside valid range [1..6]."
+        raise InvalidArgumentException(
+            f'Given "level" value ({level}) outside valid range [1..6].'
         )
 
     # store bullet used for this level for future coherence check
-    if list_used_bullets[level] == "":
-        list_used_bullets[level] = placeholder
+    if list_used_bullets[level] == '':
+        list_used_bullets[level] = bullet
 
     # veify incoherent usage of bullets by nesting levels
-    if placeholder != list_used_bullets[level]:
-        raise ValueError("")
-
-    # check 'placeholder' value
-    if placeholder not in VALID_BULLETS:
-        raise ValueError(
-            f"Given 'placeholder' value ('{placeholder}') is not valid "
-                "(allowed values: {list_placeholders})."
+    if bullet != list_used_bullets[level]:
+        raise IncoherenceException(
+            f'Trying to use bullet "{bullet}" at level ({level})'
+            'where previously used "{list_used_bullets[level]}".'
         )
 
+    # check 'placeholder' value
+    if bullet not in VALID_BULLETS:
+        raise InvalidArgumentException(
+            f'Given "placeholder" value ("{bullet}") is not valid '
+            '(allowed values: {list_placeholders}).'
+        )
 
-# TODO: verify item staring with Numeber-dot case
-
-    # remove whithe spaces from 'text'
+    # remove unwanted white spaces and end of lines
     result = text.strip()
 
-    # item placeholder
-    bullet = f"{placeholder} "
+    # if you need to start an unordered list item with a number
+    # followed by a period, you can use a backslash (\) to escape
+    # the period.
+    result = re.sub(r'(^\d+)\.', '\1\\.', result, 1)
+
+    # list item placeholder
+    bullet = f'{bullet}'
 
     # indentation spaces
-    indent = "    "*(level-1)
+    indent = '    '*(level-1)
 
     # extra spaces needed in subsequent indents
-    extra_pad = " "*len(bullet)
+    extra_pad = ' '*len(bullet)
 
-    # render secion using placeholder and identation
+    # render secion using bulltes and identation
     result = fill(
         text,
-        width=page_width-len(indent),
-        initial_indent=f"{indent}{placeholder} ",
-        subsequent_indent=f"{indent}{extra_pad}"
+        width = page_width-len(indent),
+        initial_indent = f'{indent}{bullet} ',
+        subsequent_indent = f'{indent}{extra_pad} '
     )
 
     # add an ending empty line
-    result += "\n"
+    result = f'{result}\n\n'
 
     # return rendered section
     return result

@@ -53,6 +53,15 @@ d.add_code(text)
 
     doc.add_ruler()
 
+    doc.add_h2("Lists samples")
+    append_fragment(doc, """
+d.add_ul('One. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_ul('Two. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_ul('Three. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+""")
+
+    doc.add_ruler()
+
 f = open("SAMPLES.md", "w")
 f.write(doc.get_doc())
 f.close()

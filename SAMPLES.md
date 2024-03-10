@@ -114,3 +114,39 @@ This is an sample section text.
 
 --------------------------------------------------------------------------------
 
+## Lists samples
+
+Python code  
+
+```python
+d.add_ul('One. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_ul('Two. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_ul('Three. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+```
+
+Generated Markdown code  
+
+```markdown
+* One. This is a very long line and should be splitted.  This is a very long
+  line and should be splitted. This is a very long line and should be splitted.
+
+* Two. This is a very long line and should be splitted.  This is a very long
+  line and should be splitted. This is a very long line and should be splitted.
+
+* Three. This is a very long line and should be splitted.  This is a very long
+  line and should be splitted. This is a very long line and should be splitted.
+```
+
+Rendered Markdown code  
+
+* One. This is a very long line and should be splitted.  This is a very long
+  line and should be splitted. This is a very long line and should be splitted.
+
+* Two. This is a very long line and should be splitted.  This is a very long
+  line and should be splitted. This is a very long line and should be splitted.
+
+* Three. This is a very long line and should be splitted.  This is a very long
+  line and should be splitted. This is a very long line and should be splitted.
+
+--------------------------------------------------------------------------------
+
