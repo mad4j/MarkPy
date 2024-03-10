@@ -22,13 +22,22 @@ def render_table_header(*headers) -> str:
 def render_table_cell(text: str, width: int, align=0) -> str:
     """
     """
+
+    # remove unwanted white spaces and end-lines
     text = text.strip()
+
+    # escape '|' pipe char within cell content
+    text = text.replace('|', '&#124;')
+
+    # justify cell content
     if align == 0:
         text = text.ljust(width, " ")
     elif align == 1:
         text = text.rjust(width, " ")
     else:
         text = text.center(width, " ")
+
+    # return rendered content
     return text
 
 
