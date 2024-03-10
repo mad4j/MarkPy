@@ -40,7 +40,7 @@ def render_para(text: str, page_width=80, trailer="\n\n") -> str:
     """
 
     # remove unwanted white spaces
-    result = text.lstrip()
+    result = text.strip()
 
     # text indentation a given page width
     result = fill(
@@ -48,7 +48,7 @@ def render_para(text: str, page_width=80, trailer="\n\n") -> str:
         width=page_width,
     )
 
-    ## add trailer (at least on empty line)
+    ## add trailer (at least one empty line)
     result += trailer
 
     # return result value
@@ -58,15 +58,24 @@ def render_para(text: str, page_width=80, trailer="\n\n") -> str:
 def render_quote(text: str, page_width=80, trailer="\n\n") -> str:
     """
     """
-    result = text.lstrip()
+    
+    # remove unwanted white spaces
+    result = text.strip()
+    
+    # add indentation and split using 'page_width' as limit
     result = fill(
         text,
         width=page_width,
-        initial_indent="> ",
-        subsequent_indent="  "
+        initial_indent='> ',
+        subsequent_indent='  '
     )
+
+    ## add trailer (at least one empty line)
     result += trailer
+
+    # return rendered result
     return result
+
 
 def render_code(text: str, language: str = "text", page_width: int = 80) -> str:
     """
