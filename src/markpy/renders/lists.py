@@ -38,7 +38,7 @@ def render_ol(
     with the number one.
 
     Args:
-        term : str
+        text : str
             text to be displayed in list item
         level : int
             list nesting level (up to six levels)
