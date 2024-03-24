@@ -8,7 +8,7 @@ Headings module.
 # see LICENSE file
 
 
-from markpy.exceptions import InvalidArgumentException
+from writedown.exceptions import InvalidArgumentException
 
 
 # valid unordered list placeholders

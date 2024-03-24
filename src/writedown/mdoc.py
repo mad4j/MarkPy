@@ -1,5 +1,5 @@
 """
-MarkPy - Easy Markdown document generator.
+WriteDown - Easy Markdown document generator.
 
 """
 
@@ -8,16 +8,16 @@ MarkPy - Easy Markdown document generator.
 
 
 from typing import List, Self
-from markpy.exceptions import InvalidArgumentException
+from writedown.exceptions import InvalidArgumentException
 
-from markpy.renders.lists import render_ol, render_dl, render_ul
-from markpy.renders.headings import render_hn, render_uhn, render_ruler
-from markpy.renders.sections import render_para, render_quote, render_code
+from writedown.renders.lists import render_ol, render_dl, render_ul
+from writedown.renders.headings import render_hn, render_uhn, render_ruler
+from writedown.renders.sections import render_para, render_quote, render_code
 
-from markpy.renders.tables import render_table_header
-from markpy.renders.tables import render_table_row
-from markpy.renders.tables import render_table_footer
-from markpy.renders.tables import get_table_cell_align
+from writedown.renders.tables import render_table_header
+from writedown.renders.tables import render_table_row
+from writedown.renders.tables import render_table_footer
+from writedown.renders.tables import get_table_cell_align
 
 
 class MDoc:

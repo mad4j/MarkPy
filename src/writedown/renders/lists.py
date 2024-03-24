@@ -1,5 +1,5 @@
 """
-MarkPy - Easy Markdown document generator.
+WriteDown - Easy Markdown document generator.
 
 Lists module.
 """
@@ -13,7 +13,7 @@ from textwrap import fill
 
 from typing import List
 
-from markpy.exceptions import IncoherenceException, InvalidArgumentException
+#from writedown.exceptions import IncoherenceException, InvalidArgumentException
 
 
 # valid unordered list placeholders

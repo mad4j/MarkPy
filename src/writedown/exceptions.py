@@ -1,5 +1,5 @@
 """
-MarkPy - Easy Markdown document generator.
+WriteDown - Easy Markdown document generator.
 
 Exceptions module.
 """

@@ -1,8 +1,8 @@
 
 
 
-from markpy.mdoc import MDoc
-import markpy.renders.emphasys as em
+from writedown.mdoc import MDoc
+import writedown.renders.emphasys as em
 
 
 def append_fragment(doc: MDoc, statements: str) -> None:
