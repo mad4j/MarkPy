@@ -58,10 +58,10 @@ def render_para(text: str, page_width=80, trailer="\n\n") -> str:
 def render_quote(text: str, page_width=80, trailer="\n\n") -> str:
     """
     """
-    
+
     # remove unwanted white spaces
     result = text.strip()
-    
+
     # add indentation and split using 'page_width' as limit
     result = fill(
         text,
@@ -94,7 +94,8 @@ def render_code(text: str, language: str = "text", page_width: int = 80) -> str:
         language = 'text'
 
     # remove unwanted line endings
-    text = text.strip()
+    # preserving any possible initial indentation
+    text = text.rstrip()
 
     # escape backticks eventually contained in 'text'
     if '`' in text:

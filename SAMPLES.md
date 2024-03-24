@@ -116,11 +116,53 @@ This is an sample section text.
 
 ## Lists samples
 
+### Ordered lists samples
+
+Python code  
+
+```python
+
+d.add_ol('One. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_ol('Two. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+d.add_ol('Three. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
+```
+
+Generated Markdown code  
+
+```markdown
+  1. One. This is a very long line and should be splitted.  This is a very long
+     line and should be splitted. This is a very long line and should be
+     splitted.
+
+  2. Two. This is a very long line and should be splitted.  This is a very long
+     line and should be splitted. This is a very long line and should be
+     splitted.
+
+  3. Three. This is a very long line and should be splitted.  This is a very
+     long line and should be splitted. This is a very long line and should be
+     splitted.
+```
+
+Rendered Markdown code  
+
+  1. One. This is a very long line and should be splitted.  This is a very long
+     line and should be splitted. This is a very long line and should be
+     splitted.
+
+  2. Two. This is a very long line and should be splitted.  This is a very long
+     line and should be splitted. This is a very long line and should be
+     splitted.
+
+  3. Three. This is a very long line and should be splitted.  This is a very
+     long line and should be splitted. This is a very long line and should be
+     splitted.
+
 ### Unordered lists samples
 
 Python code  
 
 ```python
+
 d.add_ul('One. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
 d.add_ul('Two. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
 d.add_ul('Three. This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
@@ -155,6 +197,7 @@ Rendered Markdown code
 Python code  
 
 ```python
+
 d.add_dl('One.', 'This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
 d.add_dl('Two.', 'This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
 d.add_dl('Three.', 'This is a very long line and should be splitted.  This is a very long line and should be splitted. This is a very long line and should be splitted.')
@@ -165,30 +208,30 @@ Generated Markdown code
 ```markdown
 One.
 : This is a very long line and should be splitted.  This is a very long line and
-should be splitted. This is a very long line and should be splitted.
+  should be splitted. This is a very long line and should be splitted.
 
 Two.
 : This is a very long line and should be splitted.  This is a very long line and
-should be splitted. This is a very long line and should be splitted.
+  should be splitted. This is a very long line and should be splitted.
 
 Three.
 : This is a very long line and should be splitted.  This is a very long line and
-should be splitted. This is a very long line and should be splitted.
+  should be splitted. This is a very long line and should be splitted.
 ```
 
 Rendered Markdown code  
 
 One.
 : This is a very long line and should be splitted.  This is a very long line and
-should be splitted. This is a very long line and should be splitted.
+  should be splitted. This is a very long line and should be splitted.
 
 Two.
 : This is a very long line and should be splitted.  This is a very long line and
-should be splitted. This is a very long line and should be splitted.
+  should be splitted. This is a very long line and should be splitted.
 
 Three.
 : This is a very long line and should be splitted.  This is a very long line and
-should be splitted. This is a very long line and should be splitted.
+  should be splitted. This is a very long line and should be splitted.
 
 --------------------------------------------------------------------------------
 

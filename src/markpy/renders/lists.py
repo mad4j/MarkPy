@@ -7,17 +7,79 @@ Lists module.
 # Daniele Olmisani <daniele.olmisani@gmail.com>
 # see LICENSE file
 
+
 import re
 from textwrap import fill
 
+from typing import List
 
 from markpy.exceptions import IncoherenceException, InvalidArgumentException
 
-from typing import List
-
 
 # valid unordered list placeholders
-VALID_BULLETS = ['*', '-', '+']
+LIST_VALID_MARKERS: List[str] = ['*', '-', '+']
+
+# allowed number of nested lists
+LIST_MAX_LEVEL: int = 6
+
+
+def render_ol(
+    text: str,
+    level: int = 1,
+    index: int = 1,
+    page_width: int = 80
+) -> str :
+
+    """
+    Renders a single item of an ordered list.
+    
+    To create an ordered list, add line items with numbers followed by periods. 
+    The numbers don't have to be in numerical order, but the list should start 
+    with the number one.
+
+    Args:
+        term : str
+            text to be displayed in list item
+        level : int
+            list nesting level (up to six levels)
+        index : int
+            marker of list item
+        page_width : int
+            max list widht
+
+    Returns:
+        str : rendered list item as string
+
+    Raises:
+        None
+    """
+
+    # remove unwanted white spaces and end of lines
+    result = text.strip()
+
+    # item marker
+    marker = f'{index:>3}.'
+
+    # indentation spaces
+    indent = '    '*(level-1)
+
+    # extra spaces needed in subsequent indents
+    extra_pad = ' '*len(marker)
+
+    # render secion using bulltes and identation
+    result = fill(
+        text,
+        width = page_width-len(indent),
+        initial_indent = f'{indent}{marker} ',
+        subsequent_indent = f'{indent}{extra_pad} '
+    )
+
+    # add an ending empty line
+    result = f'{result}\n\n'
+
+    # return rendered result
+    return result
+
 
 # Renders a single item of an unordered list.
 def render_ul(
@@ -73,7 +135,7 @@ def render_ul(
         )
 
     # check 'placeholder' value
-    if bullet not in VALID_BULLETS:
+    if bullet not in LIST_VALID_MARKERS:
         raise InvalidArgumentException(
             f'Given "placeholder" value ("{bullet}") is not valid '
             '(allowed values: {list_placeholders}).'
@@ -144,7 +206,6 @@ def render_dl(
     # remove unwanted white spaces and end of lines
     term = term.strip()
     text = text.strip()
-
 
     # render 'term' using provided 'page_width'
     term = fill(

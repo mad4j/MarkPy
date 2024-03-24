@@ -10,7 +10,7 @@ MarkPy - Easy Markdown document generator.
 from typing import List, Self
 from markpy.exceptions import InvalidArgumentException
 
-from markpy.renders.lists import render_dl, render_ul
+from markpy.renders.lists import render_ol, render_dl, render_ul
 from markpy.renders.headings import render_hn, render_uhn, render_ruler
 from markpy.renders.sections import render_para, render_quote, render_code
 
@@ -25,12 +25,17 @@ class MDoc:
     """Class for easily generate pretty-readable Markdown documents.
     """
 
+    # allowed number of nested lists
+    LIST_MAX_LEVEL: int = 6
+
+
     def __init__(self: Self, page_width: int = 80) -> None:
         self.doc = ''
         self.page_width = page_width
         self.cell_widths = []
         self.cell_aligns = []
         self.list_used_bullets = ['', '', '', '', '', '']
+        self.list_last_indexes = [0, 0, 0, 0, 0, 0]
 
     def __str__(self: Self) -> str:
         return self.doc
@@ -42,7 +47,7 @@ class MDoc:
         # return interal document representation
         return self.doc
 
-    def append(self: Self, doc: str) -> None:
+    def append(self: Self, doc: Self) -> None:
         """Append the content of anohter MDoc object.
         """
         self.doc += doc.get_doc()
@@ -128,16 +133,54 @@ class MDoc:
 #   Bullet lists
 #   ------------
 
+    def add_ol(
+        self: Self,
+        text: str,
+        level: int = 1,
+        restart: bool = False,
+    ) -> None | InvalidArgumentException:
+
+        """_summary_
+
+        Args:
+            self (Self): _description_
+            text (_type_, optional): _description_. Defaults to 1.
+            level (int, optional): _description_. Defaults to 1.
+        """
+
+        # check 'level' value
+        if level<=0 or level>self.LIST_MAX_LEVEL:
+            raise InvalidArgumentException(
+                f'Given "level" value ({level}) outside valid range [1..{self.LIST_MAX_LEVEL}].'
+        )
+
+        # restart item index
+        if restart:
+            self.list_last_indexes[level-1] = 0
+
+        # increment last used index
+        self.list_last_indexes[level-1] += 1
+
+        # append rendered list item
+        self.doc += render_ol(
+            text,
+            level,
+            self.list_last_indexes[level-1],
+            self.page_width
+        )
+
+
+
     def add_ul(self: Self, text: str, marker: str = '*', level: int = 1):
         """Append a bullet of un un-ordered list
         """
         self.doc += render_ul(
-            text, 
-            marker, 
+            text,
+            marker,
             level,
             self.list_used_bullets,
             self.page_width)
-        
+
     def add_dl(self: Self, term: str, text: str):
         """_summary_
 
@@ -146,7 +189,7 @@ class MDoc:
             text (str): _description_
         """
         self.doc += render_dl(term, text, self.page_width)
-        
+
 
 
 #   Tables
