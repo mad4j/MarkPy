@@ -2,6 +2,7 @@
 import os
 import binascii
 import hashlib
+import zlib
 from functools import wraps
 from time import time
 
@@ -31,7 +32,7 @@ if __name__ == '__main__':
 
     target = zeros(data)
 
-    domain = 4
+    domain = 3
     max = target
     result = data
     head = 0
@@ -50,7 +51,11 @@ if __name__ == '__main__':
         if v % 0x1000000 == 0:
             print(f'{v:010x}: max: {max}')
 
-    print(f'result: {data}, zeros: {max}')
+    print(f'RESULT: value: {head:010x}, zeros: {max} result: {binascii.hexlify(bytearray(result))}')
+
+    data_z = zlib.compress(data, 9)
+    result_z = zlib.compress(result, 9)
+    print(f'compressed size: data: {len(data_z)}, result: {len(result_z)}')
 
     with open("input.dat", "wb") as binary_file:
         binary_file.write(data)
